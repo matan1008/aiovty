@@ -13,6 +13,10 @@ class AioVtyClient:
         self.reader, self.writer = await asyncio.open_connection(host, port)
         return await self.read()
 
+    async def close(self):
+        self.writer.close()
+        await self.writer.wait_closed()
+
     async def enable(self):
         await self.write(b'enable')
         self.prompt_char = '#'

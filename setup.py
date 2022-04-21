@@ -30,5 +30,5 @@ if __name__ == '__main__':
         project_urls={
             'aiovty': 'https://github.com/matan1008/aiovty'
         },
-        tests_require=['pytest'],
+        tests_require=['pytest', 'pytest_asyncio'],
     )
