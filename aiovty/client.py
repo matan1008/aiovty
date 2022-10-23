@@ -8,6 +8,7 @@ class AioVtyClient:
         self.node = ''
         self.reader = None
         self.writer = None
+        self._lock = asyncio.Lock()
 
     async def connect(self, host, port):
         self.reader, self.writer = await asyncio.open_connection(host, port)
@@ -28,8 +29,9 @@ class AioVtyClient:
         await self.read()
 
     async def command(self, command):
-        await self.write(command)
-        data = (await self.read())[len(command):].strip(b'\r\n')
+        async with self._lock:
+            await self.write(command)
+            data = (await self.read())[len(command):].strip(b'\r\n')
         return data
 
     async def configure_terminal(self):
